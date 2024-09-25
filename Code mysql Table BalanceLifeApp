@@ -1,0 +1,61 @@
+-- Membuat database
+CREATE DATABASE BalanceLifeApp;
+
+-- Menggunakan database yang baru saja dibuat
+USE BalanceLifeApp;
+
+-- Membuat tabel 'users' untuk menyimpan informasi pengguna
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    role ENUM('parent', 'child') NOT NULL,
+    date_of_birth DATE NOT NULL
+);
+
+-- Membuat tabel 'activities' untuk menyimpan aktivitas harian pengguna
+CREATE TABLE activities (
+    activity_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    activity_name VARCHAR(100) NOT NULL,
+    activity_type ENUM('work', 'exercise', 'family time', 'personal') NOT NULL,
+    duration_minutes INT NOT NULL,
+    date DATE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Membuat tabel 'meals' untuk menyimpan catatan makanan yang dikonsumsi
+CREATE TABLE meals (
+    meal_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    meal_name VARCHAR(100) NOT NULL,
+    meal_time ENUM('breakfast', 'lunch', 'dinner', 'snack') NOT NULL,
+    calories INT NOT NULL,
+    proteins FLOAT NOT NULL,
+    carbohydrates FLOAT NOT NULL,
+    fats FLOAT NOT NULL,
+    date DATE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Membuat tabel 'events' untuk menyimpan jadwal acara keluarga
+CREATE TABLE events (
+    event_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    event_name VARCHAR(100) NOT NULL,
+    event_description TEXT,
+    event_date DATE NOT NULL,
+    event_time TIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Membuat tabel 'health_goals' untuk menyimpan target kesehatan pengguna
+CREATE TABLE health_goals (
+    goal_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    goal_type ENUM('steps', 'calories', 'exercise_duration') NOT NULL,
+    goal_value INT NOT NULL,
+    date_set DATE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
